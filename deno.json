@@ -1,0 +1,9 @@
+{
+  "imports": {
+    "@oak/oak": "jsr:@oak/oak@^17.1.3",
+    "@std/log": "jsr:@std/log@^0.224.11",
+    "@tajpouria/cors": "jsr:@tajpouria/cors@^1.2.1",
+    "@victr/htmlparser2": "jsr:@victr/htmlparser2@^9.1.0"
+  },
+  "nodeModulesDir": "auto"
+}
