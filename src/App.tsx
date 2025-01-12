@@ -1,3 +1,4 @@
+import '@mantine/core/styles.css';
 import { Link, BrowserRouter, Route, Routes } from "react-router-dom";
 import { useState } from "react";
 import React from "react";
@@ -9,7 +10,6 @@ import { Schedule } from "./pages/schedule.tsx";
 import { Selected } from "./pages/selected.tsx";
 import { NotFound } from "./pages/notfound.tsx";
 import Navbar from "./components/header.tsx";
-import '@mantine/core/styles.css';
 import {MantineProvider } from '@mantine/core';
 
 'use client';
@@ -25,12 +25,11 @@ const ErrorFallBack: React.FC<FallbackProps> = ({ error, resetErrorBoundary }) =
 
 function App() {
   return (
-    <>
     <MantineProvider>
-        <ErrorBoundary
-          fallbackRender={ErrorFallBack}
-        >
-          <BrowserRouter>
+      <ErrorBoundary
+        fallbackRender={ErrorFallBack}
+      >
+        <BrowserRouter>
             <Navbar />
             <Routes>
               <Route path="/" element={<Home />} />
@@ -39,10 +38,9 @@ function App() {
               <Route path="/selected" element={<Selected />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
-          </BrowserRouter>
-        </ErrorBoundary>
-        </MantineProvider>
-    </>
+        </BrowserRouter>
+      </ErrorBoundary>
+    </MantineProvider>
   );
 }
 

@@ -36,6 +36,7 @@ const Navbar = () => {
                 key={link.label}
                 className={classes.link}
                 data-active={active === link.link || undefined}
+                underline="never"
                 onClick={(event) => {
                     // event.preventDefault();
                     setActive(link.link);
