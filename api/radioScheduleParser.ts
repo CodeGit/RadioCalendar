@@ -1,7 +1,6 @@
 import * as log from "@std/log";
-import { HTMLElement, parse } from "node-html-parser";
+import { parse } from "node-html-parser";
 import { DaySchedule, Programme } from "../types/types.ts";
-
 
 const getProgrammesFromDailySchedule = (page: string): DaySchedule => {
   const root = parse(page);
