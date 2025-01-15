@@ -68,8 +68,8 @@ const getProgrammesFromDailySchedule = (page: string): DaySchedule => {
                 url: link,
                 image: image,
                 time: {
-                start: startTime,
-                end: nextTime,
+                start: startTime.getTime(),
+                end: nextTime.getTime(),
                 duration: nextTime.getTime() - startTime.getTime(),
                 }
             }
@@ -78,7 +78,7 @@ const getProgrammesFromDailySchedule = (page: string): DaySchedule => {
         }
     }
   }
-  
+
   const schedule: DaySchedule = {
     day: date.getDate(),
     month: date.getMonth(),
@@ -87,5 +87,17 @@ const getProgrammesFromDailySchedule = (page: string): DaySchedule => {
   };
   return schedule;
 };
+
+// const getProgrammesFromWeeklySchedule = (page: string): WeekSchedule => {
+//     const root = parse(page);
+//     const weekDates = root.querySelector('.week-guide__table');
+//     const days = root.querySelector('.week-guide__table__day');
+//     log.info(days);
+    
+//     const week: WeekSchedule = {
+//         days: []
+//     }
+//     return week;
+//   }
 
 export { getProgrammesFromDailySchedule };

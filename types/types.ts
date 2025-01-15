@@ -7,8 +7,8 @@ export type Station = {
 };
 
 export type Event = {
-  start: Date;
-  end: Date;
+  start: number;
+  end: number;
   duration: number;
 };
 
@@ -31,3 +31,7 @@ export type DaySchedule = {
   year: number;
   programmes: Programme[];
 };
+
+export type WeekSchedule = {
+  days: DaySchedule[];
+}

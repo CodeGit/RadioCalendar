@@ -2,10 +2,13 @@ import * as log from "@std/log";
 import { Application, Router } from "@oak/oak";
 import { oakCors } from "@tajpouria/cors";
 import { createClient, RedisClientType } from "npm:redis@^4.7";
+import dayjs from "dayjs";
+
 import config from "./config/config.json" with { type: "json" };
 import { Programme } from "../types/types.ts";
 import {
   getProgrammesFromDailySchedule,
+  getProgrammesFromWeeklySchedule,
 } from "./radioScheduleParser.ts";
 
 log.setup({
@@ -38,8 +41,11 @@ router.get("/api", context => {
     const now = new Date();
     const year = now.getFullYear();
     const month = (now.getMonth() + 1).toString().padStart(2, "0");
-    const date = (now.getDate()).toString().padStart(2, "0");
-    context.response.redirect(`/api/station/${config.stations[0].key}/year/${year}/month/${month}/date/${date}`);
+    // const date = (now.getDate()).toString().padStart(2, "0");
+    // context.response.redirect(`/api/station/${config.stations[0].key}/year/${year}/month/${month}/date/${date}`);
+    const week = dayjs(now).week();
+    context.response.redirect(`/api/station/${config.stations[0].key}/year/${year}/week/${week}`);
+
 });
 
 router.get("/api/stations", (context) => {
@@ -58,17 +64,18 @@ router.get("/api/station/:station", (context) => {
 //   if (station === undefined) {
 //     throw new Error(`Cannot find station ${context.params.station}`);
 //   }
-//   const weekURL = station.week.replace("YEAR", context.params.year).replace(
-//     "WEEK_OF_YEAR",
-//     context.params.week,
-//   );
-//   const response = await fetch(weekURL);
-//   const page = await response.text();
-//   getProgrammesFromWeeklySchedule(page);
-//   log.info(
-//     `/api/station/${context.params.station}/year/${context.params.year}/week/w${context.params.week}`,
-//   );
+//   const yearMonth = new Date(``)
+//   const firstDay = dayjs(`${context.params.year}-${context.params.month}`).week(parseInt(context.params.week, 10));
+//   log.info(`FIRST DAY ${firstDay}`);
 
+//   // const weekURL = station.week.replace("YEAR", context.params.year).replace(
+//   //   "WEEK_OF_YEAR",
+//   //   context.params.week,
+//   // );
+//   // const response = await fetch(weekURL);
+//   // const page = await response.text();
+//   // getProgrammesFromWeeklySchedule(page);
+//   // log.info(`${weekURL}`);
 //   context.response.body = { text: "Successfully downloaded page" };
 // });
 
@@ -88,9 +95,9 @@ router.get(
     log.info(`URL = ${dayURL}`);
     const page = await getCachedOrFetch(cache,dayURL);
     const events = getProgrammesFromDailySchedule(page);
-    log.info(
-      `/api/station/${context.params.station}/year/${context.params.year}/month/${context.params.month}/day/${context.params.day}`,
-    );
+    // log.info(
+    //   `/api/station/${context.params.station}/year/${context.params.year}/month/${context.params.month}/day/${context.params.day}`,
+    // );
 
     context.response.body = { text: `${JSON.stringify(events)}` };
   },

@@ -1,3 +1,4 @@
+import '@mantine/core/styles.css';
 import { Link } from "react-router-dom";
 import { React, useState } from "react";
 import { Anchor, Box, Burger, Container, Group } from '@mantine/core';
@@ -24,10 +25,17 @@ const links = [
     },
 ];
 
+const header = {
+    height: "2em",
+    marginBottom: "0.5em",
+    backgroundColor: "var(--mantine-color-body)",
+    borderBottom: "1px solid light-dark(var(--mantine-color-gray-4), var(--mantine-color-dark-7))",
+    display: "flex"
+}
+
 const Navbar = () => {
     const [opened, {toggle}] = useDisclosure(false);
     const [active, setActive] = useState(links[0].link);
-    
     const items = links.map((link) => {
         return (
             <Anchor
@@ -44,11 +52,9 @@ const Navbar = () => {
             >
                 {link.label}
             </Anchor>
-    
         );
     });
-    
-    return <header className="classes.header">
+    return <header style={header}>
         <Container size="md" className="classes.inner">
             <Group gap={5} visibleFrom="xs">
                 {items}
