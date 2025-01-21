@@ -4,11 +4,9 @@ import { oakCors } from "@tajpouria/cors";
 import { createClient, RedisClientType } from "npm:redis@^4.7";
 import dayjs from "dayjs";
 
-import config from "./config/config.json" with { type: "json" };
-import { Programme } from "../types/types.ts";
+import config from "../config/config.json" with { type: "json" };
 import {
   getProgrammesFromDailySchedule,
-  getProgrammesFromWeeklySchedule,
 } from "./radioScheduleParser.ts";
 
 log.setup({
@@ -21,7 +19,7 @@ log.setup({
 });
 
 // initialise redis cache
-const cache:RedisClientType = await createClient();
+const cache:RedisClientType = await createClient({url:config.api.redis});
 await cache.on("error", err => console.log(`Redis client error [${err}]`)).connect();
 
 const router = new Router();
@@ -123,5 +121,5 @@ app.use(router.allowedMethods());
 export default app; // for tests
 
 if (import.meta.main) {
-  await app.listen({ port: 8081 }); //TODO: get port from config
+  await app.listen({ hostname: config.api.host, port: config.api.port });
 }

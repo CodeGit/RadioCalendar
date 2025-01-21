@@ -18,6 +18,7 @@
   "api": {
     "host": "localhost",
     "port": 8001,
+    "protocol": "http",
     "redis": "redis://localhost:6379"
   }
 }

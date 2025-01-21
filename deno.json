@@ -1,9 +1,19 @@
 {
   "imports": {
-    "@oak/oak": "jsr:@oak/oak@^17.1.3",
-    "@std/log": "jsr:@std/log@^0.224.11",
+    "@oak/oak": "jsr:@oak/oak@^17.1.4",
+    "@std/log": "jsr:@std/log@^0.224.13",
     "@tajpouria/cors": "jsr:@tajpouria/cors@^1.2.1",
     "@xtool/dayjs": "jsr:@xtool/dayjs@^0.1.4"
   },
-  "nodeModulesDir": "auto"
+  "nodeModulesDir": "auto",
+  "compilerOptions": {
+    "lib": [
+      "ESNext",
+      "dom"
+    ],
+    "resolveJsonModule": true
+  },
+  "unstable": [
+    "sloppy-imports"
+  ]
 }

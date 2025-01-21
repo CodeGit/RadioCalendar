@@ -6,5 +6,7 @@
   ],
   "compilerOptions": {
     "lib": [ "ESNext",  "dom", ],
+    "moduleResolution": "node",
+    "resolveJsonModule": true
   },
 }
