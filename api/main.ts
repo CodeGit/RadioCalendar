@@ -97,7 +97,7 @@ router.get(
     //   `/api/station/${context.params.station}/year/${context.params.year}/month/${context.params.month}/day/${context.params.day}`,
     // );
 
-    context.response.body = { text: `${JSON.stringify(events)}` };
+    context.response.body = events
   },
 );
 
