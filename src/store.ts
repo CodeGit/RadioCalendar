@@ -3,14 +3,14 @@ import { configureStore } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/query'
 
 import scheduleSliceReducer from './features/schedule/scheduleSlice.ts'
-import { stationApi } from "./features/api/apiSlice.ts";
+import { radioApi } from "./features/api/apiSlice.ts";
 
 export const store = configureStore({
     reducer: {
         schedule: scheduleSliceReducer,
-        [stationApi.reducerPath]: stationApi.reducer
+        [radioApi.reducerPath]: radioApi.reducer,
     },
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(stationApi.middleware),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(radioApi.middleware),
 });
 
 setupListeners(store.dispatch);
