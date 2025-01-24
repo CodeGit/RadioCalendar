@@ -24,6 +24,7 @@ dayjs.extend(weekday);
 dayjs.locale(engb);
 
 export function Schedule() {
+    const gridPeriod = 10;
     // redux stuff
     const dispatch = useAppDispatch();
     const date = useAppSelector(selectDate);
@@ -53,7 +54,7 @@ export function Schedule() {
 
     const timeColumn = [<span key="time">Time</span>];
     for(let hours = 0; hours < 24; hours++) {
-        for (let minutes = 0; minutes < 60; minutes += 15) {
+        for (let minutes = 0; minutes < 60; minutes += gridPeriod) {
             timeColumn.push(
                 <span key={`${hours}-${minutes}`} style={{border: "1px solid red"}}>
                     {hours.toString().padStart(2, "0")}:{minutes.toString().padStart(2, "0")}
@@ -66,9 +67,10 @@ export function Schedule() {
     if (station) {
         for(let i = startDay; i <= lastDay; i = i.add(1, "day")) {
             console.log(`Adding ${i.toDate().toDateString()} to columns ${columns.length}`);
+            const weekDay = dayjs(i).weekday();    
             columns.push(
                 <Suspense key={i.toString()} fallback={<Skeleton height={"50vh"} width={"12vw"}/>}>
-                    <DayScheduleColumn date={i.toDate()} station={station} />
+                    <DayScheduleColumn gridColumn={weekDay + 2} gridPeriod={gridPeriod} date={i.toDate()} station={station} />
                 </Suspense>
             );
         }
@@ -143,7 +145,7 @@ export function Schedule() {
             <div style={{
                     display: "grid", 
                     gridTemplateColumns: `0.5fr repeat(${columns.length}, 1fr)`,
-                    gridTemplateRows: `repeat(${timeColumn.length}, 1fr)`,
+                    gridTemplateRows:"max-content",
                     columnGap: "0.1rem",
                     gridAutoFlow: "column",
                     border: "1px red solid"
