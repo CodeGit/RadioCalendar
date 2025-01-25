@@ -1,6 +1,6 @@
 import react from "react";
-import React from "npm:@types/react@^19.0.7";
-import { useState, useEffect, Suspense, useContext } from "react";
+import React, { JSX } from "npm:@types/react";
+import { useContext } from "react";
 
 import dayjs from "dayjs";
 import weekday from "dayjs/plugin/weekday";
@@ -9,7 +9,10 @@ import engb from 'dayjs/locale/en-gb'
 
 import { useFetchDayScheduleQuery } from "../api/apiSlice.ts";
 import { ConfigContext } from '../../contexts/ConfigContext.ts';
-import { Station, DaySchedule } from "../../../types/types.ts";
+import { Station, Programme } from "../../../types/types.ts";
+import ProgrammeDetails from "../programmes/ProgrammeDetails.tsx";
+import { useMantineTheme } from "@mantine/core";
+
 
 dayjs.extend(duration);
 dayjs.extend(weekday);
@@ -23,7 +26,7 @@ type DayScheduleColumnProps = {
 }
 
 const DayScheduleColumn = ({station, date, gridPeriod, gridColumn }: DayScheduleColumnProps) => {
-    const domParser = new DOMParser();
+    const theme = useMantineTheme();
     const config = useContext(ConfigContext);
     const dayScheduleQueryResult = useFetchDayScheduleQuery({
         host: config.api.host,
@@ -34,31 +37,52 @@ const DayScheduleColumn = ({station, date, gridPeriod, gridColumn }: DaySchedule
         year: date.getFullYear(),
         month: date.getMonth() + 1
     });
-    const programmes = [];
+   
+    const programmes:JSX.Element[] = [];
     if (dayScheduleQueryResult.isFetching) {
-        return <span style={{
+        programmes.push(<span key={`${gridColumn}-empty`} style={{
             gridRowStart: 1, 
             gridRowEnd: Math.round((24 * 60) / gridPeriod) + 2
-        }}>Loading...</span>;
+        }}>Loading...</span>);
     } else if (dayScheduleQueryResult.isSuccess ) {
-        console.log(dayScheduleQueryResult.data);
+        const gridProgrammes: { [key: string]: [Programme] } = {};
         for (let i = 0; i < dayScheduleQueryResult.data.programmes.length; i++) {
             const programme = dayScheduleQueryResult.data.programmes[i];
             const gridStart = Math.round(dayjs(programme.time.start).hour() * (60 / gridPeriod) + dayjs(programme.time.start).minute() / gridPeriod);
-            const gridEnd = gridStart + Math.round(dayjs.duration(programme.time.duration).asMinutes() / 15);
+            // const gridEnd = gridStart + Math.round(dayjs.duration(programme.time.duration).asMinutes() / 15);
+            if (!gridProgrammes[gridStart.toString()]) {
+                gridProgrammes[gridStart.toString()] = [programme];
+            } else {
+                gridProgrammes[gridStart.toString()].push(programme);
+            }
+        }
+        for (const key of Object.keys(gridProgrammes)) {
+            const progs = gridProgrammes[key];
+            const gridStart = parseInt(key);
+            const gridEnd = progs.reduce(
+                (max, prog) => {
+                    const end = gridStart + Math.round(dayjs.duration(prog.time.duration).asMinutes() / 15);
+                    if (end > max) {
+                        return end;
+                    } else {
+                        return max; 
+                    }
+                }, gridStart
+            );
+            
+            const elements = progs.map((programme) => 
+                <div key={`${programme.time.start}`}>
+                   {<ProgrammeDetails programme={programme} />}
+                </div>
+            );
             programmes.push(
-                <span key={`${programme.time.start}`} style={{
-                            gridRowStart: gridStart + 2, 
-                            gridRowEnd: gridEnd + 2, 
-                            gridColumnStart: gridColumn, 
-                            gridColumnEnd: gridColumn, 
-                            border: "1px solid green"
-                        }}>
-                    <p />{domParser.parseFromString(programme.title, "text/html").body.textContent}
-                    <p />{domParser.parseFromString(programme.subtitle ?? "", "text/html").body.textContent}
-                    <p />{dayjs(programme.time.start).hour().toString().padStart(2, "02")}:{dayjs(programme.time.start).minute().toString().padStart(2, "02")} - {dayjs(programme.time.end).hour().toString().padStart(2, "02")}:{dayjs(programme.time.end).minute().toString().padStart(2, "02")}
-                    <p />{dayjs.duration(programme.time.duration).asMinutes().toString().padStart(2, "02")} minutes
-                    <p />{gridStart+2} - {gridEnd+2}
+                <span key={`${gridStart}-${gridEnd}`} style={{
+                    gridRowStart: gridStart + 2, 
+                    gridRowEnd: gridEnd + 2, 
+                    gridColumnStart: gridColumn, 
+                    gridColumnEnd: gridColumn, 
+                }}>
+                    {elements}
                 </span>
             );
         }
@@ -66,7 +90,13 @@ const DayScheduleColumn = ({station, date, gridPeriod, gridColumn }: DaySchedule
     
     return(
         <>
-            <span key={date.getTime()} style={{gridRowStart: 1, gridRowEnd: 1}}>{date.toDateString()}</span>
+            <span key={date.getTime()} style={{
+                    gridRowStart: 1, 
+                    gridRowEnd: 1,
+                    backgroundColor: theme.colors.blue[9],
+                    color: theme.white,
+                    marginTop: "0.5em",
+                }}>{date.toDateString()}</span>
             {programmes}
         </>
         

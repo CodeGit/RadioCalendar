@@ -1,7 +1,7 @@
 import '@mantine/core/styles.css';
 import { Link } from "react-router-dom";
 import { React, useState } from "react";
-import { Anchor, Box, Burger, Container, Group } from '@mantine/core';
+import { Anchor, Box, Burger, Container, Group, useMantineTheme } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import classes from './header.module.css';
 
@@ -34,6 +34,7 @@ const header = {
 }
 
 const Navbar = () => {
+    const theme = useMantineTheme();
     const [opened, {toggle}] = useDisclosure(false);
     const [active, setActive] = useState(links[0].link);
     const items = links.map((link) => {

@@ -3,21 +3,17 @@ import { parse } from "node-html-parser";
 import { DaySchedule, Programme } from "../types/types.ts";
 
 const getProgrammesFromDailySchedule = (page: string): DaySchedule => {
-  const root = parse(page);
-  const dateText = root.querySelectorAll("h1 time")[0].innerText;
-  const date = new Date(dateText);
-  const validDaySubdivisions = ['early', 'morning', 'afternoon', 'evening'];
-  const periods = [];
-  const programmes: Programme[] = []
-  for(const subdivision of validDaySubdivisions) {
-    const dayDivision = root.querySelector(`li#${subdivision}`)
-    if (dayDivision)
-        periods.push(dayDivision);
-  }
-  for (const period of periods) {
-    const progs = period.querySelectorAll("div.broadcast");
-    for (let i=0; i < progs.length; i++) {
-        const prog = progs[i];
+    const root = parse(page);
+    const dateText = root.querySelectorAll("h1 time")[0].innerText;
+    const date = new Date(dateText);
+    const periods = root.querySelectorAll("li#early, li#morning, li#afternoon, li#evening");
+    const programmes: Programme[] = []
+  
+    const dayProgs = periods.flatMap((period) => {
+        return period.querySelectorAll("div.broadcast");
+    });
+    for (let i=0; i < dayProgs.length; i++) {
+        const prog = dayProgs[i];
         const [hStr, mStr] = (prog.querySelector("span.timezone--time")?.innerText?.split(":") ?? []);
         const startTime = new Date(
             date.getFullYear(),
@@ -28,11 +24,11 @@ const getProgrammesFromDailySchedule = (page: string): DaySchedule => {
         );
         let nextHStr: string;
         let nextMStr: string;
-        if (i+1 < progs.length) {
-            [nextHStr, nextMStr] = (progs[i+1].querySelector("span.timezone--time")?.innerText?.split(":") ?? []);
-        } else {
+        if (i === dayProgs.length - 1) {
             nextHStr = "23";
             nextMStr = "59";
+        } else {
+            [nextHStr, nextMStr] = (dayProgs[i+1].querySelector("span.timezone--time")?.innerText?.split(":") ?? []);
         }
         const nextTime = new Date(
             date.getFullYear(),
@@ -41,7 +37,7 @@ const getProgrammesFromDailySchedule = (page: string): DaySchedule => {
             parseInt(nextHStr, 10),
             parseInt(nextMStr, 10),
         );
-        const image = prog.querySelector("img.image")?.getAttribute('src');
+        const image = prog.querySelector("img.image")?.getAttribute('data-src');
         const title = prog.querySelector("span.programme__title")?.innerText;
         const subtitle = prog.querySelector("span.programme__subtitle")?.innerText;
         const link = prog.querySelector("a")?.getAttribute('href');
@@ -68,18 +64,16 @@ const getProgrammesFromDailySchedule = (page: string): DaySchedule => {
                 url: link,
                 image: image,
                 time: {
-                start: startTime.getTime(),
-                end: nextTime.getTime(),
-                duration: nextTime.getTime() - startTime.getTime(),
+                    start: startTime.getTime(),
+                    end: nextTime.getTime(),
+                    duration: nextTime.getTime() - startTime.getTime(),
                 }
             }
             programmes.push(programme);
-            log.info(`Created ${title} (${pid}) ${episode_number}/${episode_total}: ${startTime.toUTCString()}`);
         }
     }
-  }
 
-  const schedule: DaySchedule = {
+    const schedule: DaySchedule = {
     day: date.getDate(),
     month: date.getMonth(),
     year: date.getFullYear(),

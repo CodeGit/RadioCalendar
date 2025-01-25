@@ -3,7 +3,7 @@ import { useState, useEffect, Suspense, useContext } from "react";
 
 import { DatePicker, DateValue, Day } from '@mantine/dates';
 import { useDisclosure } from '@mantine/hooks';
-import { Modal, Button, Chip, Skeleton, Combobox, useCombobox } from '@mantine/core';
+import { Modal, Button, Chip, Skeleton, Combobox, useCombobox, useMantineTheme } from '@mantine/core';
 import '@mantine/dates/styles.css';
 
 import dayjs from "dayjs";
@@ -24,7 +24,8 @@ dayjs.extend(weekday);
 dayjs.locale(engb);
 
 export function Schedule() {
-    const gridPeriod = 10;
+    const theme = useMantineTheme();
+    const gridPeriod = 15;
     // redux stuff
     const dispatch = useAppDispatch();
     const date = useAppSelector(selectDate);
@@ -56,17 +57,20 @@ export function Schedule() {
     for(let hours = 0; hours < 24; hours++) {
         for (let minutes = 0; minutes < 60; minutes += gridPeriod) {
             timeColumn.push(
-                <span key={`${hours}-${minutes}`} style={{border: "1px solid red"}}>
+                <span key={`${hours}-${minutes}`} style={{
+                        backgroundColor: theme.colors.blue[9],
+                        color: theme.colors.blue[0],
+                        padding: "0.5em",
+                        textAlign: "center",
+                    }}>
                     {hours.toString().padStart(2, "0")}:{minutes.toString().padStart(2, "0")}
                 </span>
             );
         }
     }
-    console.log(`Column 1 ${timeColumn.length}`);
     const columns = [];
     if (station) {
         for(let i = startDay; i <= lastDay; i = i.add(1, "day")) {
-            console.log(`Adding ${i.toDate().toDateString()} to columns ${columns.length}`);
             const weekDay = dayjs(i).weekday();    
             columns.push(
                 <Suspense key={i.toString()} fallback={<Skeleton height={"50vh"} width={"12vw"}/>}>
@@ -146,10 +150,9 @@ export function Schedule() {
                     display: "grid", 
                     gridTemplateColumns: `0.5fr repeat(${columns.length}, 1fr)`,
                     gridTemplateRows:"max-content",
-                    columnGap: "0.1rem",
-                    gridAutoFlow: "column",
-                    border: "1px red solid"
-                    
+                    columnGap: "0.5rem",
+                    rowGap: "0.5rem",
+                    gridAutoFlow: "column",                    
                 }}>
                 {timeColumn}
                 {columns}
