@@ -1,6 +1,6 @@
 import { assertEquals } from "https://deno.land/std@0.200.0/assert/mod.ts";
 import app from "./main.ts";
-import config from "./config/config.json" with { type: "json" };
+import config from "../config/config.json" with { type: "json" };
 const PORT = 8100;
 
 Deno.test("Testing API version", async () => {

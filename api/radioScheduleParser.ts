@@ -1,8 +1,8 @@
 import * as log from "@std/log";
 import { parse } from "node-html-parser";
-import { DaySchedule, Programme } from "../types/types.ts";
+import { DaySchedule, Programme, Station } from "../types/types.ts";
 
-const getProgrammesFromDailySchedule = (page: string): DaySchedule => {
+const getProgrammesFromDailySchedule = (page: string, station: Station ): DaySchedule => {
     const root = parse(page);
     const dateText = root.querySelectorAll("h1 time")[0].innerText;
     const date = new Date(dateText);
@@ -67,7 +67,8 @@ const getProgrammesFromDailySchedule = (page: string): DaySchedule => {
                     start: startTime.getTime(),
                     end: nextTime.getTime(),
                     duration: nextTime.getTime() - startTime.getTime(),
-                }
+                },
+                station: station,
             }
             programmes.push(programme);
         }

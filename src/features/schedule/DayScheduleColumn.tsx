@@ -72,7 +72,7 @@ const DayScheduleColumn = ({station, date, gridPeriod, gridColumn }: DaySchedule
             
             const elements = progs.map((programme) => 
                 <div key={`${programme.time.start}`}>
-                   {<ProgrammeDetails programme={programme} />}
+                   {<ProgrammeDetails programme={programme} scheduleMode={true} />}
                 </div>
             );
             programmes.push(

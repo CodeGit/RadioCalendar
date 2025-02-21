@@ -1,7 +1,8 @@
 import '@mantine/core/styles.css';
 import { Link, BrowserRouter, Route, Routes } from "react-router-dom";
 import { useState } from "react";
-import React from "react";
+import react from "react";
+import React, { JSX } from "npm:@types/react";
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import {MantineProvider } from '@mantine/core';
 
@@ -35,13 +36,15 @@ function App() {
         <ConfigContext.Provider value={config}>
           <BrowserRouter>
               <Navbar />
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/schedule" element={<Schedule />} />
-                <Route path="/programmes" element={<Programmes />} />
-                <Route path="/selected" element={<Selected />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
+                <div style={{marginTop: "3em"}}>
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/schedule" element={<Schedule />} />
+                    <Route path="/programmes" element={<Programmes />} />
+                    <Route path="/selected" element={<Selected />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </div>
           </BrowserRouter>
         </ConfigContext.Provider>
       </ErrorBoundary>

@@ -56,3 +56,4 @@ export default tseslint.config({
   },
 });
 ```
+Put DB_FILE_NAME=file:local.db in .env

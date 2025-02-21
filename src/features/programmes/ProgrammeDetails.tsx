@@ -8,23 +8,25 @@ import duration from "dayjs/plugin/duration";
 
 import { Programme } from "../../../types/types.ts";
 
-const ProgrammeDetails = ({programme}: {programme: Programme}) => {
+const ProgrammeDetails = ({programme, scheduleMode}: {programme: Programme, scheduleMode: boolean}) => {
     const theme = useMantineTheme();
     const start = dayjs(programme.time.start);
     const end = dayjs(programme.time.end);
     const parser = new DOMParser();
-    console.log(`Programme ${programme.title} ${start.toString()} ${end.toString()}`);
     return (
         <div style={{
             boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.5)", 
             backgroundColor: theme.colors.blue[1],
             borderRadius: "1em",
             margin: "0.3em",
+            // border: "0.2em solid black",
         }}>
             <img style={{
+                    borderTopRightRadius: "1em",
+                    borderTopLeftRadius: "1em",
                     backgroundColor: theme.white,
                     color: theme.white,
-                    padding: "0.1em",
+                    objectFit: "contain",
                 }} src={programme.image} alt={programme.title} />
             <div style={{
                     backgroundColor: theme.colors.blue[8],
@@ -48,10 +50,11 @@ const ProgrammeDetails = ({programme}: {programme: Programme}) => {
                 backgroundColor: theme.colors.blue[2],
                 fontSize: "smaller",
 
-            }}>
-                {start.hour().toString().padStart(2, "0")}:{start.minute().toString().padStart(2, "0")}
-                -
-                {end.hour().toString().padStart(2, "0")}:{end.minute().toString().padStart(2, "0")}
+            }}> { scheduleMode ? 
+                `${start.hour().toString().padStart(2, "0")}:${start.minute().toString().padStart(2, "0")} 
+                    - ${end.hour().toString().padStart(2, "0")}:${end.minute().toString().padStart(2, "0")}`
+                : `${programme.station?.name}`
+                }
             </div>
             <Anchor style={{
                 padding: "0.1em",

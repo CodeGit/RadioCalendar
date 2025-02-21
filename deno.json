@@ -1,7 +1,8 @@
 {
   "imports": {
     "@oak/oak": "jsr:@oak/oak@^17.1.4",
-    "@std/log": "jsr:@std/log@^0.224.13",
+    "@std/dotenv": "jsr:@std/dotenv@^0.225.3",
+    "@std/log": "jsr:@std/log@^0.224.14",
     "@tajpouria/cors": "jsr:@tajpouria/cors@^1.2.1",
     "@xtool/dayjs": "jsr:@xtool/dayjs@^0.1.4"
   },
@@ -10,8 +11,7 @@
     "lib": [
       "ESNext",
       "dom"
-    ],
-    "resolveJsonModule": true
+    ]
   },
   "unstable": [
     "sloppy-imports"
