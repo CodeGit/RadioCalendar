@@ -19,19 +19,19 @@ export const preselects = pgTable("preselects", {
 ]);
 
 export const stations = pgTable("stations", {
-    pid: text().primaryKey().notNull(),
+    pid: text().primaryKey(),
     name: text(),
 });
 
 export const series = pgTable("series", {
-    pid: text().primaryKey().notNull(),
+    pid: text().primaryKey(),
     name: text().notNull(),
     url: text().notNull(),
     total: integer(),
 });
 
 export const programmes = pgTable("programmes", {
-    pid: text().primaryKey().notNull(),
+    pid: text().primaryKey(),
     title: text().notNull(),
     subtitle: text(),
     synopsis: text(),
@@ -44,7 +44,9 @@ export const programmes = pgTable("programmes", {
     online: boolean(),
     recorded: boolean(),
     recordedTime: timestamp(),
-    broadcastTime: timestamp(),
+    startTime: timestamp(),
+    endTime: timestamp(),
+    duration: integer(),
     file: text(),
 });
 

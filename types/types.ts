@@ -6,6 +6,12 @@ export type Station = {
   day: string;
 };
 
+export type Event = {
+  start: number;
+  end: number;
+  duration: number;
+};
+
 export type Programme = {
   title: string;
   subtitle?: string;
@@ -17,6 +23,11 @@ export type Programme = {
   url: string;
   image?: string;
   time: Event;
+  series?: string;
+  selected?:boolean;
+  recorded?: boolean;
+  recordedTime?: number;
+  file?: Text;
 };
 
 export type DaySchedule = {

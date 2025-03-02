@@ -12,7 +12,7 @@ const DB_URL=`postgresql://${user}:${password}@${host}:${port}/${dbname}`;
 console.log("DB ", DB_URL);
 export default defineConfig({
   out: './drizzle',
-  schema: './api/schema',
+  schema: './api/schema/schema.ts',
   dialect: 'postgresql',
   dbCredentials: {
     url: DB_URL,

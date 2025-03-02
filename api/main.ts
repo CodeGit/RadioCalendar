@@ -1,9 +1,9 @@
  /// <reference lib="deno.ns" />
 import * as log from "@std/log";
-import { Application, Router } from "@oak/oak";
+import { Application, Router, RouterContext } from "@oak/oak";
 import { oakCors } from "@tajpouria/cors";
-import { createClient, RedisClientType } from "npm:redis@^4.7";
-import db, { getStations } from "./db.ts";
+import { createClient, RedisClientType } from "npm:redis";
+import { stationsDB, programmesDB, selectedDB } from "./db/db.ts";
 
 import config from "../config/config.json" with { type: "json" };
 import {
@@ -24,7 +24,7 @@ const cache:RedisClientType = await createClient({url:config.api.redis});
 await cache.on("error", err => console.log(`Redis client error [${err}]`)).connect();
 
 console.log("Starting API server");
-// console.log(await getStations());
+
 const router = new Router();
 
 router.get("/api/version", (context) => {
@@ -34,8 +34,20 @@ router.get("/api/version", (context) => {
 });
 
 router.get("/", context => {
+  log.info("GET");
     context.response.redirect("/api");
 });
+
+router.post("/", context => {
+  log.info("POST", context.params);
+  context.response.body = {};
+});
+
+router.delete("/", context => {
+  log.info("DELETE");
+  context.response.redirect("/api");
+});
+
 
 router.get("/api", context => {
     log.info("/api");
@@ -82,6 +94,48 @@ router.get(
     context.response.body = events
   },
 );
+
+router.get(
+  "/api/programmes",
+  (context) => {
+    log.info("programmes");
+    // const pageNum = context.params.page;
+    // const pageSize = context.params.size;
+    const { searchParams } = context.request.url;
+    log.info(`SearchParam=${context.request.url.searchParams}`);
+    context.response.body = {
+      "message": "Hello"
+    }
+  }
+);
+
+router.get("/api/selected/:pid",
+  async (context) => {
+    const pid = context.params.pid;
+    const isSelected = await selectedDB.isProgrammeSelected(pid);
+    context.response.body = isSelected;
+  }
+);
+
+router.put("/api/selected/:pid", async (context: RouterContext<"/api/selected/:pid">) => {
+  const pid = context.params.pid;
+  if (context.request.hasBody) {
+    const {programme, selected} = await context.request.body.json();
+    programme.selected = selected;
+    if (selected) {
+      programmesDB.createOrUpdate(programme);
+      selectedDB.addSelectedProgramme(programme);
+    } else {
+      programmesDB.removeIfNotRecorded(programme);
+      selectedDB.removeSelectedProgramme(programme);
+    }
+    context.response.body = {};
+  } else {
+    context.response.status = 400;
+    context.response.body = {"message": "Incorrect parameters"};
+  }
+
+});
 
 const getCachedOrFetch = async (cache: RedisClientType ,url:string):Promise<string> => {
     let page;

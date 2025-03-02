@@ -21,16 +21,16 @@ export const scheduleSlice = createSlice({
     name: 'schedule',
     initialState,
     reducers: {
-        changeDate: (state, action: PayloadAction<number>) => {
+        changeDate: (state, action) => {
             state.timestamp = action.payload;
         },
-        changeStation: (state, action: PayloadAction<Station>) => {
+        changeStation: (state, action) => {
             state.station = action.payload;
         },
         toggleScheduleMode: (state) => {
             state.weekMode = !state.weekMode;
         },
-        changeSchedule: (state, action: PayloadAction<DaySchedule[]>) => {
+        changeSchedule: (state, action) => {
             state.schedule = action.payload;
         }
     }

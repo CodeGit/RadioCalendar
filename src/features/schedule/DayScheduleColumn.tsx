@@ -71,19 +71,17 @@ const DayScheduleColumn = ({station, date, gridPeriod, gridColumn }: DaySchedule
             );
             
             const elements = progs.map((programme) => 
-                <div key={`${programme.time.start}`}>
-                   {<ProgrammeDetails programme={programme} scheduleMode={true} />}
-                </div>
+                   <ProgrammeDetails key={`${programme.time.start}`} programme={programme} scheduleMode={true} />
             );
             programmes.push(
-                <span key={`${gridStart}-${gridEnd}`} style={{
+                <div key={`${gridStart}-${gridEnd}`} style={{
                     gridRowStart: gridStart + 2, 
                     gridRowEnd: gridEnd + 2, 
                     gridColumnStart: gridColumn, 
                     gridColumnEnd: gridColumn, 
                 }}>
                     {elements}
-                </span>
+                </div>
             );
         }
     }
