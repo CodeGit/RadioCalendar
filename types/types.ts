@@ -2,8 +2,8 @@ export type Station = {
   name: string;
   key: string;
   id: string;
-  weekURL: string;
-  dayURL: string;
+  week: string;
+  day: string;
 };
 
 export type Event = {
@@ -23,6 +23,11 @@ export type Programme = {
   url: string;
   image?: string;
   time: Event;
+  series?: string;
+  selected?:boolean;
+  recorded?: boolean;
+  recordedTime?: number;
+  file?: Text;
 };
 
 export type DaySchedule = {

@@ -6,5 +6,15 @@
   ],
   "compilerOptions": {
     "lib": [ "ESNext",  "dom", ],
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "target": "es6",
+    "jsx": "react",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["react", "react-dom"]
   },
 }

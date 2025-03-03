@@ -23,3 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 node_modules
+
+# private
+.env
+dump.rdb
+.vite

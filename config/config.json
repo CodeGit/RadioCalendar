@@ -5,22 +5,22 @@
       "key": "radio4",
       "id": "p00fzl7j",
       "week": "https://www.bbc.co.uk/schedules/p00fzl7j/YEAR/wWEEK_OF_YEAR",
-      "day": "https://www.bbc.co.uk/schedules/p00fzl7j/YEAR/MONTH/DATE"
+      "day": "https://www.bbc.co.uk/schedules/p00fzl7j/YEAR/MONTH/DATE",
+      "programme": "https://www.bbc.co.uk/sounds/play/pid"
     },
     {
       "name": "Radio 4 Extra",
       "key": "radio4extra",
       "id": "p00fzl7l",
       "week": "https://www.bbc.co.uk/schedules/p00fzl7l/YEAR/wWEEK_OF_YEAR",
-      "day": "https://www.bbc.co.uk/schedules/p00fzl7l/YEAR/MONTH/DATE"
+      "day": "https://www.bbc.co.uk/schedules/p00fzl7l/YEAR/MONTH/DATE",
+      "programme": "https://www.bbc.co.uk/sounds/play/pid"
     }
   ],
-  "client": {
-    "proxy": "localhost",
-    "port": 8000
-  },
   "api": {
-    "port": 3000,
-    "cacheLocation": "../cache"
+    "host": "localhost",
+    "port": 8001,
+    "protocol": "http",
+    "redis": "redis://localhost:6379"
   }
 }
