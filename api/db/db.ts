@@ -77,6 +77,7 @@ export const selectedDB = {
 
 export const programmesDB = {
     createOrUpdate: async (programme: Programme) => {
+        log.info('Creating programme ', programme.pid);
         return db.insert(programmes).values({
             pid: programme.pid,
             title: programme.title,
@@ -108,6 +109,7 @@ export const programmesDB = {
         });
     },
     removeIfNotRecorded: async (programme: Programme) => {
+        log.info('Deleting programme ', programme.pid);
         return db.delete(programmes).where(and(
             eq(programmes.pid, programme.pid),
             ne(programmes.recorded, true)

@@ -14,7 +14,8 @@ export const ConfigContext = createContext<Config>({
   api: {
     host: "",
     port: "",
-    protocol: ""
+    protocol: "",
+    "programme": ""
   },
   stations: []
 });

@@ -109,6 +109,13 @@ router.get(
   }
 );
 
+router.get(
+  "/api/programmes/:pid", 
+  (context) => {
+
+  }
+);
+
 router.get("/api/selected/:pid",
   async (context) => {
     const pid = context.params.pid;
@@ -123,11 +130,11 @@ router.put("/api/selected/:pid", async (context: RouterContext<"/api/selected/:p
     const {programme, selected} = await context.request.body.json();
     programme.selected = selected;
     if (selected) {
-      programmesDB.createOrUpdate(programme);
-      selectedDB.addSelectedProgramme(programme);
+      await programmesDB.createOrUpdate(programme);
+      await selectedDB.addSelectedProgramme(programme);
     } else {
-      programmesDB.removeIfNotRecorded(programme);
-      selectedDB.removeSelectedProgramme(programme);
+      await programmesDB.removeIfNotRecorded(programme);
+      await selectedDB.removeSelectedProgramme(programme);
     }
     context.response.body = {};
   } else {

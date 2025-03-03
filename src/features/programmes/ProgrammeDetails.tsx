@@ -41,16 +41,16 @@ const ProgrammeDetails = ({programme, scheduleMode}: {programme: Programme, sche
         boxStyle['border'] = "0.2em solid black";
     }
 
-    const onSelect = ()=> {
+    const onSelect = async () => {
         if (isSelected) {
-            setDeselected({
+            await setDeselected({
                 host: config.api.host, 
                 port: config.api.port, 
                 protocol: config.api.protocol,
                 programme,
             });
         } else {
-            setSelected({
+            await setSelected({
                 host: config.api.host, 
                 port: config.api.port, 
                 protocol: config.api.protocol,
