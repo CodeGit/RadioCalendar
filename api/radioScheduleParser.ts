@@ -93,7 +93,6 @@ const getDetailsFromProgrammePage = (page: string): {online: boolean, descriptio
     if (anchors && anchors.length > 0) {
         series = anchors[0]?.getAttribute('href')?.split('/')[2];
     }
-    log.info('Description', series);
     return ({online, description, series})
 }
 

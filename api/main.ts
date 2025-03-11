@@ -123,7 +123,6 @@ router.get(
   async (context) => {
     const pid = context.params.pid;
     const url = config.urls.programme.replace("PID", pid);
-    log.info("URL", url);
     const page = await getCachedOrFetch(cache, url);
     const {online, description, series} = getDetailsFromProgrammePage(page);
     context.response.body = {online, description, series};
