@@ -35,6 +35,7 @@ export const programmes = pgTable("programmes", {
     title: text().notNull(),
     subtitle: text(),
     synopsis: text(),
+    description: text(),
     episode: integer(),
     episodeTotal: integer(),
     station: text().notNull().references(() => stations.pid),
@@ -44,9 +45,9 @@ export const programmes = pgTable("programmes", {
     online: boolean(),
     recorded: boolean(),
     recordedTime: timestamp(),
-    startTime: timestamp(),
-    endTime: timestamp(),
-    duration: integer(),
+    startTime: timestamp().notNull(),
+    endTime: timestamp().notNull(),
+    duration: integer().notNull(),
     file: text(),
 });
 

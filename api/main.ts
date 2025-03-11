@@ -8,6 +8,7 @@ import { stationsDB, programmesDB, selectedDB } from "./db/db.ts";
 import config from "../config/config.json" with { type: "json" };
 import {
   getProgrammesFromDailySchedule,
+  getDetailsFromProgrammePage,
 } from "./radioScheduleParser.ts";
 
 log.setup({
@@ -47,7 +48,6 @@ router.delete("/", context => {
   log.info("DELETE");
   context.response.redirect("/api");
 });
-
 
 router.get("/api", context => {
     log.info("/api");
@@ -110,9 +110,23 @@ router.get(
 );
 
 router.get(
-  "/api/programmes/:pid", 
-  (context) => {
+  "/api/programme/:pid", 
+  async (context) => {
+    const pid = context.params.pid;
+    const programme = await programmesDB.getProgramme(pid);
+    context.response.body = programme;
+  }
+);
 
+router.get(
+  "/api/programme/details/:pid", 
+  async (context) => {
+    const pid = context.params.pid;
+    const url = config.urls.programme.replace("PID", pid);
+    log.info("URL", url);
+    const page = await getCachedOrFetch(cache, url);
+    const {online, description, series} = getDetailsFromProgrammePage(page);
+    context.response.body = {online, description, series};
   }
 );
 

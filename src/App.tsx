@@ -10,7 +10,7 @@ import "./App.css";
 import { Home } from "./pages/home.tsx";
 import { Programmes } from "./pages/programmes.tsx";
 import { Schedule } from "./pages/schedule.tsx";
-import { Selected } from "./pages/selected.tsx";
+import Selected from "./pages/selected.tsx";
 import { NotFound } from "./pages/notfound.tsx";
 import { ConfigContext } from "./contexts/ConfigContext.ts";
 import Navbar from "./components/header.tsx";

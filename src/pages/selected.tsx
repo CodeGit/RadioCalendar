@@ -1,7 +1,12 @@
+import react from "react";
+import React, { JSX } from "npm:@types/react";
+import { useContext } from "react";
+
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import React from "react";
 
-export function Selected() {
-    return <h1>Selected</h1>
-}
+const Selected = () => {
+    
+};
+
+export default Selected;

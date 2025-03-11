@@ -4,6 +4,8 @@ export type Station = {
   id: string;
   week: string;
   day: string;
+  programme: string;
+  play: string;
 };
 
 export type Event = {
@@ -15,6 +17,7 @@ export type Event = {
 export type Programme = {
   title: string;
   subtitle?: string;
+  description?: string;
   synopsis?: string;
   episode?: number;
   episode_total?: number;
@@ -24,7 +27,8 @@ export type Programme = {
   image?: string;
   time: Event;
   series?: string;
-  selected?:boolean;
+  selected?: boolean;
+  online?: boolean;
   recorded?: boolean;
   recordedTime?: number;
   file?: Text;

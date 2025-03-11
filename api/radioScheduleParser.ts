@@ -83,6 +83,20 @@ const getProgrammesFromDailySchedule = (page: string, station: Station ): DaySch
   return schedule;
 };
 
+const getDetailsFromProgrammePage = (page: string): {online: boolean, description: string, series?: string} => {
+    // log.info("Online", page);
+    const root = parse(page);
+    const online = root.querySelectorAll('.playout__icon').length > 0; 
+    const description = root.querySelector('.synopsis-toggle__long')?.innerText || "";
+    const anchors = root.querySelectorAll('p a').map(a => a.innerText.match('See all episodes from') && a);
+    let series;
+    if (anchors && anchors.length > 0) {
+        series = anchors[0]?.getAttribute('href')?.split('/')[2];
+    }
+    log.info('Description', series);
+    return ({online, description, series})
+}
+
 // const getProgrammesFromWeeklySchedule = (page: string): WeekSchedule => {
 //     const root = parse(page);
 //     const weekDates = root.querySelector('.week-guide__table');
@@ -95,4 +109,4 @@ const getProgrammesFromDailySchedule = (page: string, station: Station ): DaySch
 //     return week;
 //   }
 
-export { getProgrammesFromDailySchedule };
+export { getProgrammesFromDailySchedule, getDetailsFromProgrammePage };

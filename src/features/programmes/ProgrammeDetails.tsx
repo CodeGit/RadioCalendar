@@ -7,11 +7,11 @@ import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import { ConfigContext } from "../../contexts/ConfigContext.ts";
 import { Programme } from "../../../types/types.ts";
-import { useSetSelectedMutation, useSetDeselectedMutation, useIsSelectedQuery } from "../api/apiSlice.ts";
+import { useSetSelectedMutation, useSetDeselectedMutation, useIsSelectedQuery, useFetchProgrammeDetailsQuery } from "../api/apiSlice.ts";
 
 const ProgrammeDetails = ({programme, scheduleMode}: {programme: Programme, scheduleMode: boolean}) => {
     const config = useContext(ConfigContext);
-    const [updateSelection, setUpdateSelection] = useState(false);
+    // const [updateSelection, setUpdateSelection] = useState(false);
 
     const { 
         currentData: isSelected, 
@@ -26,7 +26,21 @@ const ProgrammeDetails = ({programme, scheduleMode}: {programme: Programme, sche
     });
     const [setSelected, setSelectedResult] = useSetSelectedMutation();
     const [setDeselected, setDeselectedResult] = useSetDeselectedMutation();
+    const {
+        currentData: details,
+        isFetching: areDetailsFetching,
+        isError: areDetailsError,
+        refetch: refetchDetails
+    } = useFetchProgrammeDetailsQuery({
+        host: config.api.host, 
+            port: config.api.port, 
+            protocol: config.api.protocol,
+            programme,
+    });
+    console.log('Programme', details);
+
     const theme = useMantineTheme();
+    
     const start = dayjs(programme.time.start);
     const end = dayjs(programme.time.end);
     const parser = new DOMParser();

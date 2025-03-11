@@ -18,5 +18,11 @@ podman  pull docker.io/library/redis:7-alpine
 podman  pull docker.io/library/postgres:lalpine
 ```
 
-Then create a .env file using the options shown in .env.sample
-[tbc]
+Then create a .env file using the options shown in [.env.sample](https://github.com/CodeGit/RadioCalendar/blob/main/.env.sample)
+
+The database can then be initialised by running
+
+```bash
+deno task drizzle:push
+```
+

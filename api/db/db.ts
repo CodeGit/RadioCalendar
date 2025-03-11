@@ -4,8 +4,7 @@ import { eq, and, ne } from "npm:drizzle-orm/expressions";
 import { programmes, stations, series, selected, preselects } from "../schema/schema.ts";
 import config from "../../config/config.json" with { type: "json" };
 import * as log from "@std/log";
-import { Programme } from "../../types/types.ts";
-
+import { Programme, Station, Event } from "../../types/types.ts";
 
 const user = Deno.env.get("PG_USER");
 const password = Deno.env.get("PG_PASSWORD");
@@ -46,6 +45,13 @@ await initialise();
 export const stationsDB = {
     getStations: async () => {
         return await db.select().from(stations)
+    },
+    getStation: async (pid: string): Promise<Station|null>  => {
+        const [match] = await db.select().from(stations).where(eq(stations.pid, pid));
+        if (match) {
+
+        }
+        return null;
     }
 };
 
@@ -83,6 +89,7 @@ export const programmesDB = {
             title: programme.title,
             subtitle: programme?.subtitle,
             synopsis: programme?.synopsis,
+            description: programme?.description,
             episode: programme?.episode,
             episodeTotal: programme?.episode_total,
             station: programme.station?.id,
@@ -91,12 +98,14 @@ export const programmesDB = {
             startTime: new Date(programme.time.start),
             endTime: new Date(programme.time.end),
             duration: programme.time.duration,
+            online: programme.online,
         }).onConflictDoUpdate({
             target: programmes.pid,
             set: {
                 title: programme.title,
                 subtitle: programme?.subtitle,
                 synopsis: programme?.synopsis,
+                description: programme?.description,
                 episode: programme?.episode,
                 episodeTotal: programme?.episode_total,
                 station: programme.station?.id,
@@ -115,8 +124,20 @@ export const programmesDB = {
             ne(programmes.recorded, true)
         ));
     },
-    getProgramme: async (pid: string): Promise<Programme | null> => {
-        const programme = null;
-        return programme;
-    }
+    getProgramme: async (pid: string) => {
+        const [programme] = await db.select().from(programmes).where(eq(programmes.pid, pid));
+        if (programme) {
+            const station = await stationsDB.getStation(programme.station);
+            if (station) {
+                programme.station = station.id;
+            }
+            const time: Event = {
+                start: programme.startTime.getTime(),
+                end: programme.endTime.getTime(),
+                duration: programme.duration
+            }
+            return {...programme, time: time};
+        }
+        return null;
+    },
 };

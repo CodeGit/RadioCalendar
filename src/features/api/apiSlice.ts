@@ -79,6 +79,14 @@ export const radioApi = createApi({
       }),
       transformErrorResponse: (response: {status: string|number}, meta, arg) => response.status,
     }),
+    fetchProgramme: builder.query<{programme: Programme}, SelectedArguments>({
+      query: ({host, port, protocol, programme}) => `${protocol}://${host}:${port}/api/programme/${programme.pid}`,
+      transformErrorResponse: (response: {status: string|number}, meta, arg) => response.status,
+    }),
+    fetchProgrammeDetails: builder.query<{online: boolean, series: string, description: string}, SelectedArguments>({
+      query: ({host, port, protocol, programme}) => `${protocol}://${host}:${port}/api/programme/details/${programme.pid}`,
+      transformErrorResponse: (response: {status: string|number}, meta, arg) => response.status,
+    }),
   }),
 });
 
@@ -90,5 +98,7 @@ export const {
   useFetchSelectedQuery, 
   useSetSelectedMutation, 
   useSetDeselectedMutation,
-  useIsSelectedQuery, 
+  useIsSelectedQuery,
+  useFetchProgrammeQuery,
+  useFetchProgrammeDetailsQuery,
 } = radioApi;

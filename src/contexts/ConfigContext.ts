@@ -7,7 +7,11 @@ export interface Config {
         'port': string,
         'protocol': string,
     },
-    'stations': Station[]
+    'stations': Station[],
+    'urls': {
+      'programme': string,
+      'play': string,
+    }
 }
 
 export const ConfigContext = createContext<Config>({
@@ -15,7 +19,10 @@ export const ConfigContext = createContext<Config>({
     host: "",
     port: "",
     protocol: "",
-    "programme": ""
   },
-  stations: []
+  stations: [],
+  'urls': {
+      'programme': "",
+      'play': "",
+    }
 });
